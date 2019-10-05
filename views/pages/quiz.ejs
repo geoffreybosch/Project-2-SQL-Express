@@ -4,16 +4,19 @@
 <head>
     <title>Project 2!</title>
     <!-- css link -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- <link rel="stylesheet" href="assets/css/style.css"> -->
     <!-- font link -->
     <link href="https://fonts.googleapis.com/css?family=Lato|Orbitron&display=swap" rel="stylesheet">
 </head>
 
 <body>
+    <% include ../partials/nav %>
     <div class="box">
         <h1>Project 2!</h1>
         <div class="quiz-timer">
+            <input id="playerName" name="name" type="text">
             <div class="quiz">
+
                 <button id="go">Go!</button>
             </div>
         </div>
@@ -21,7 +24,134 @@
     <!-- jquery link -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- js file link -->
-    <script type="text/javascript" src="assets/javascript/app.js"></script>
+    <script type="text/javascript">
+        var timer
+        var quizArea = $('.quiz')
+        var rules = {
+            right: 0,
+            wrong: 0,
+            counter: 50,
+            timer: function () {
+                rules.counter--;
+                if (rules.counter == 0) { alert('Time up!') }
+                $("#countdown").text(rules.counter + " Seconds");
+            },
+            go: function () {
+                $('#go').remove();
+                timer = setInterval(rules.timer, 1000)
+                $(".quiz-timer").append(
+                    "<h3> Time left: <p id='countdown'>50 Seconds<p> </h3>"
+                )
+                $.ajax({
+                    url: '/questions',
+                    method: 'GET'
+                }).then(function (res) {
+                    for (var i = 0; i < res.length; i++) {
+                        // console.log
+                        // debugger;
+                        quizArea.append("<h3>" + res[i].question + "</h3>");
+                        quizArea.append("<br><br><input type='radio' name='question-" + i +
+                            "' value='" + res[i].answer1 + "''>" + res[i].answer1);
+                        quizArea.append("<br><br><input type='radio' name='question-" + i +
+                            "' value='" + res[i].answer2 + "''>" + res[i].answer2);
+                        quizArea.append("<br><br><input type='radio' name='question-" + i +
+                            "' value='" + res[i].answer3 + "''>" + res[i].answer3);
+                        quizArea.append("<br><br><input type='radio' name='question-" + i +
+                            "' value='" + res[i].answer4 + "''>" + res[i].answer4);
+                    }
+                    quizArea.append("<br><br><br><button id='stop'>Stop</button>");
+                }
+                )
+
+
+
+            },
+            stop: function () {
+                $(".quiz-timer").append(
+                    "<h3> You completed the quiz with only</h3> <h3 id='countdown'>50 Seconds</h3><h3> left!</h3>"
+                )
+                var inputs = quizArea.children("input:checked");
+
+                var that = this;
+
+                $.ajax({
+                    url: '/questions',
+                    method: 'GET'
+                }).then(function (res) {
+                    for (var i = 0; i < inputs.length; i++) {
+                        var answers = []
+                        answers.push(res[i].answer1)
+                        answers.push(res[i].answer2)
+                        answers.push(res[i].answer3)
+                        answers.push(res[i].answer4)
+                        console.log("These are all the answers " + answers)
+                        var answer = res[i].correct_answer
+                        console.log(answer + " is turned into " + answers[answer - 1])
+                        console.log($(inputs[i]).val() + " is the chosen answer")
+                        if ($(inputs[i]).val() == answers[answer - 1]) {
+                            console.log("+1 Right answer")
+                            rules.right++;
+                        } else {
+                            console.log("+1 Wrong answer")
+                            rules.wrong++;
+                            console.log(this.wrong)
+                        }
+                        if (i == 1) {
+                            that.score();
+                        }
+                    }
+
+                }
+                )
+
+
+
+            },
+            score: function () {
+                console.log(this.right)
+                // debugger;
+                clearInterval(timer);
+                quizArea.html("<h2>Congrats!</h2>");
+                quizArea.append("<h3>Right Answers: " + this.right + "</h3>");
+                quizArea.append("<h3>Wrong Answers: " + this.wrong + "</h3>");
+                this.insertscore();
+            }
+            ,
+            insertscore: function () {
+                // debugger;
+                // event.preventDefault();
+
+                var pn = $("input#playerName")[0].value;
+                var ps = this.right;
+                var pt = this.counter;
+
+                $.ajax({
+                    url: '/insert',
+                    method: 'POST',
+                    data: {
+                        playerName: pn,
+                        score: ps,
+                        time: pt
+                    }
+                }).then(function (res) {
+                    console.log("Insert AJAX ran.")
+                });
+            }
+        }
+
+        $(document).on("click", "#go", function () {
+            rules.go();
+        });
+        $(document).on("click", "#stop", function () {
+            rules.stop();
+        });
+
+        function showComments() {
+            $('div').empty();
+
+
+        }
+    </script>
 </body>
 
 </html>

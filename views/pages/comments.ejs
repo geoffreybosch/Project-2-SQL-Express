@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Project 2: Comments</title>
+</head>
+
+<body>
+    <% include ../partials/nav %>
+    <h1>Winner's Circle</h1>
+    <h2>These comments have been left by people who have completed the quiz.</h2>
+
+    <div id="commentBox"></div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        // debugger;
+
+        function showComments() {
+            $('div').empty();
+
+            $.ajax({
+                url: '/comment_feed',
+                method: 'GET'
+            }).then(function (res) {
+                for (var f = 0; f < res.length; f++) {
+                    // debugger;
+                    var br = $('<br>');
+                    var cA = $('<ul>');
+                    var cN = $('<li>');
+                    cN.text("Name: " + res[f].player_name);
+                    var cC = $('<li>');
+                    cC.text("Comment: " + res[f].comment);
+                    var cS = $('<li>');
+                    cS.text("Correct Answers: " + res[f].score);
+                    var cT = $('<li>');
+                    cT.text("Time Left: " + res[f].time + " Seconds");
+
+                    $(cA).append(cN, cC, cS, cT);
+                    $('#commentBox').append(cA);
+
+                    $('#commentBox').append(br);
+                }
+            }
+            )
+        }
+        showComments()
+    </script>
+</body>
+
+</html>

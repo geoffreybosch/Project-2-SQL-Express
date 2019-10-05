@@ -80,6 +80,59 @@ app.get('/leaderboard', function (req, res) {
 
 //////////////////////////////////////////////////////////////////////
 
+app.get('/questions', function (req, res) {
+    connection.query('SELECT * FROM questions_and_answers;', function (error, results, fields) {
+        if (error) res.send(error)
+        else res.json(results);
+    });
+});
+
+//////////////////////////////////////////////////////////////////////
+
+app.get('/comment_feed', function (req, res) {
+    connection.query('SELECT comments.id, comments.comment, scores.player_name, scores.score, scores.time FROM comments LEFT JOIN scores ON comments.comm_id = scores.id ORDER BY  comments.id ASC; ', function (error, results, fields) {
+        if (error) res.send(error)
+        else res.json(results);
+    });
+});
+
+//////////////////////////////////////////////////////////////////////
+
+app.post('/insert', function (req, res) {
+    // res.json(req.query);
+    console.log("Score: " + req.body.score)
+    console.log("Name: " + req.body.playerName)
+    console.log("Time: " + req.body.time)
+
+
+    connection.query('INSERT INTO scores (score, time, player_name) VALUES (?, ?, ?)', [req.body.score, req.body.time, req.body.playerName], function (error, results, fields) {
+        console.log("Insert connection done")
+        if (error) res.send(error)
+        else res.redirect('/');
+    });
+
+    // connection.query('INSERT INTO scores (time) VALUES (?)', [req.body.time], function (error, results, fields) {
+    //     console.log("Score connection: " + req.body.time)
+    // });
+
+    // connection.query('INSERT INTO people (name) VALUES (?)', [req.body.playerName], function (error, results, fields) {
+    //     console.log("Score connection: " + req.body.playerName)
+    //     if (error) res.send(error)
+    //     else res.redirect('/');
+    // });
+})
+
+//////////////////////////////////////////////////////////////////////
+
+app.get('/insert_comment', function (req, res) {
+    connection.query(' ', function (error, results, fields) {
+        if (error) res.send(error)
+        else res.json(results);
+    });
+});
+
+//////////////////////////////////////////////////////////////////////
+
 app.listen(3000, function () {
     console.log('listening on 3000');
 });
