@@ -1,7 +1,7 @@
 // Express package
 var express = require("express");
 var app = express();
-
+app.use(express.static("assets"));
 //////////////////////////////////////////////////////////////////////
 
 // set the view engine to ejs
@@ -76,6 +76,15 @@ app.get('/comments', function (req, res) {
 
 app.get('/leaderboard', function (req, res) {
     res.render('pages/leaderboard');
+});
+
+//////////////////////////////////////////////////////////////////////
+
+app.get('/leaderboard_feed', function (req, res) {
+    connection.query('SELECT * FROM scores ORDER BY id ASC; ', function (error, results, fields) {
+        if (error) res.send(error)
+        else res.json(results);
+    });
 });
 
 //////////////////////////////////////////////////////////////////////

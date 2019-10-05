@@ -3,6 +3,9 @@
 
 <head>
     <title>Project 2: Comments</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- font link -->
+    <link href="https://fonts.googleapis.com/css?family=Lato|Orbitron&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -10,7 +13,9 @@
     <h1>Winner's Circle</h1>
     <h2>These comments have been left by people who have completed the quiz.</h2>
 
-    <div id="commentBox"></div>
+    <div id="commentBox">
+        <ul></ul>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -18,7 +23,7 @@
         // debugger;
 
         function showComments() {
-            $('div').empty();
+            $('ul').empty();
 
             $.ajax({
                 url: '/comment_feed',
@@ -27,7 +32,6 @@
                 for (var f = 0; f < res.length; f++) {
                     // debugger;
                     var br = $('<br>');
-                    var cA = $('<ul>');
                     var cN = $('<li>');
                     cN.text("Name: " + res[f].player_name);
                     var cC = $('<li>');
@@ -37,8 +41,8 @@
                     var cT = $('<li>');
                     cT.text("Time Left: " + res[f].time + " Seconds");
 
-                    $(cA).append(cN, cC, cS, cT);
-                    $('#commentBox').append(cA);
+                    // $(cA).append(cN, cC, cS, cT);
+                    $('#commentBox').append(cN, cC, cS, cT);
 
                     $('#commentBox').append(br);
                 }

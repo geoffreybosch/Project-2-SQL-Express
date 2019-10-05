@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Project 2: Leaderboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- font link -->
+    <link href="https://fonts.googleapis.com/css?family=Lato|Orbitron&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <% include ../partials/nav %>
+    <h1>Quiz</h1>
+    <h2>Leaderboard</h2>
+    <br>
+    <br>
+    <div id=leaderboard>
+        <ul></ul>
+    </div>
+    <br>
+    <br>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        function displayLeaderboard() {
+            $('ul').empty();
+
+            $.ajax({
+                url: '/leaderboard_feed',
+                method: 'GET'
+            }).then(function (res) {
+                for (var i = 0; i < res.length; i++) {
+                    // debugger;
+                    var br = $('<br>')
+                    var liN = $('<li>');
+                    liN.text("Name: " + res[i]['player_name']);
+                    var liS = $('<li>');
+                    liS.text("Score: " + res[i]['score']);
+                    var liT = $('<li>');
+                    liT.text("Time: " + res[i]['time']);
+                    $('#leaderboard').append(liN, liS, liT);
+                    $('#leaderboard').append(br);
+                    $('#leaderboard').append(br);
+                }
+            })
+        }
+        displayLeaderboard();
+    </script>
+</body>
+
+</html>
