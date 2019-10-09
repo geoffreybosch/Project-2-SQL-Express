@@ -2,22 +2,25 @@
 <html lang="en-us">
 
 <head>
-    <title>Project 2!</title>
+    <title>Quiz</title>
     <!-- css link -->
     <link rel="stylesheet" href="css/style.css">
     <!-- font link -->
     <link href="https://fonts.googleapis.com/css?family=Lato|Orbitron&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
     <% include ../partials/nav %>
     <div class="box">
         <h1>Project 2!</h1>
-        <div class="quiz-timer">
-            <input id="playerName" name="name" type="text">
+        <div class="quiz-timer form-group">
+            <h4>Name:</h4>
+            <input class="form-control" id="playerName" name="name" type="text" placeholder="Name">
             <div class="quiz">
 
-                <button id="go">Go!</button>
+                <button class="btn btn-success" id="go">Go!</button>
             </div>
         </div>
     </div>

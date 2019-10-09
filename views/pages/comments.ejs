@@ -2,19 +2,23 @@
 <html>
 
 <head>
-    <title>Project 2: Comments</title>
+    <title>Comments</title>
     <link rel="stylesheet" href="css/style.css">
     <!-- font link -->
     <link href="https://fonts.googleapis.com/css?family=Lato|Orbitron&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
     <% include ../partials/nav %>
-    <h1>Winner's Circle</h1>
-    <h2>These comments have been left by people who have completed the quiz.</h2>
+    <div class="box">
+        <h1>Winner's Circle</h1>
+        <h4>These comments have been left by people who have completed the quiz.</h4>
 
-    <div id="commentBox">
-        <ul></ul>
+        <div id="commentBox">
+            <ul></ul>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
