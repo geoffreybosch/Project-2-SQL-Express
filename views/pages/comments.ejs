@@ -2,31 +2,30 @@
 <html>
 
 <head>
-    <title>Comments</title>
-    <!-- CSS Sheet -->
-    <link rel="stylesheet" href="css/style.css">
+    <title>Quote Quiz:Comments</title>
     <!-- font link -->
     <link href="https://fonts.googleapis.com/css?family=Lato|Orbitron&display=swap" rel="stylesheet">
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- CSS Sheet -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
     <% include ../partials/nav %>
     <div class="box">
-        <h1>Winner's Circle</h1>
-        <h4>These comments have been left by people who have completed the quiz.</h4>
+        <h1>Quote Quiz's Top Players</h1>
+        <h3>These comments have been left by people who have completed the quiz.</h3>
+        <br><br>
 
         <div id="commentBox">
-            <ul></ul>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        // debugger;
 
         function showComments() {
             $('ul').empty();
@@ -36,19 +35,42 @@
                 method: 'GET'
             }).then(function (res) {
                 for (var f = 0; f < res.length; f++) {
-                    // debugger;
+                    var card = $('<div>');
+                    card.attr('class', 'card');
+                    card.attr('style', 'width: 18rem;');
+                    var cardBody = $('<div>');
+                    cardBody.attr('class', 'card-body');
+                    var cH5 = $('<h5>');
+                    cH5.attr('class', 'card-title');
+                    cH5.text("Name: " + res[f].player_name);
+                    var cH61 = $('<h6>');
+                    cH61.attr('class', 'card-subtitle mb-2 text-muted');
+                    cH61.text("Correct Answers: " + res[f].score);
+                    var cH62 = $('<h6>');
+                    cH62.attr('class', 'card-subtitle mb-2 text-muted');
+                    cH62.text("Time Left: " + res[f].time + " Seconds");
+                    var cP = $('<p>');
+                    cP.attr('class', 'card-text');
+                    cP.text("Comment: " + res[f].comment);
+
+                    $(cardBody).append(cH5, cH61, cH62, cP);
+                    $(card).append(cardBody);
+                    $('#commentBox').append(card);
+
+
+
                     var br = $('<br>');
-                    var cN = $('<li>');
-                    cN.text("Name: " + res[f].player_name);
-                    var cC = $('<li>');
-                    cC.text("Comment: " + res[f].comment);
-                    var cS = $('<li>');
-                    cS.text("Correct Answers: " + res[f].score);
-                    var cT = $('<li>');
-                    cT.text("Time Left: " + res[f].time + " Seconds");
+                    // var cN = $('<li>');
+                    // cN.text("Name: " + res[f].player_name);
+                    // var cC = $('<li>');
+                    // cC.text("Comment: " + res[f].comment);
+                    // var cS = $('<li>');
+                    // cS.text("Correct Answers: " + res[f].score);
+                    // var cT = $('<li>');
+                    // cT.text("Time Left: " + res[f].time + " Seconds");
 
                     // $(cA).append(cN, cC, cS, cT);
-                    $('#commentBox').append(cN, cC, cS, cT);
+                    // $('#commentBox').append(cN, cC, cS, cT);
 
                     $('#commentBox').append(br);
                 }

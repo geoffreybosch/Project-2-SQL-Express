@@ -2,26 +2,24 @@
 <html lang="en-us">
 
 <head>
-    <title>Quote Quiz:Quiz</title>
+    <title>Quiz</title>
+    <!-- CSS Sheet -->
+    <link rel="stylesheet" href="css/style.css">
     <!-- font link -->
     <link href="https://fonts.googleapis.com/css?family=Lato|Orbitron&display=swap" rel="stylesheet">
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!-- CSS Sheet -->
-    <link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
     <% include ../partials/nav %>
     <div class="box">
-        <h1>Quote Quiz</h1>
-        <br>
+        <h1>QuizyQuiz</h1>
         <br>
         <div class="quiz-timer form-group">
             <input class="form-control" id="playerName" name="name" type="text" placeholder="Name">
-            <br>
             <div class="quiz">
                 <button class="btn btn-success" id="go">Go!</button>
             </div>
@@ -44,11 +42,11 @@
                 </div>
                 <div class="modal-body" id="winDiv">
                     <h2>You can leave a message below that will appear on the LEADERPAGE</h2>
-                    <input class="form-control" id="commInput" type="text" placeholder="Leave a Comment Here">
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="noComm">No, Thanks</button>
-                    <button type="button" class="btn btn-primary" id="commSubmit">Submit Comment</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -56,8 +54,9 @@
 
 
     <!-- jquery link -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
@@ -87,18 +86,19 @@
                 $("#countdown").text(rules.counter + " Seconds");
             },
             go: function () {
-                $("#playerName").hide();
                 $('#go').remove();
                 timer = setInterval(rules.timer, 1000)
-                $(".quiz-timer").prepend(
+                $(".quiz-timer").append(
                     "<h3 id='counterArea'> Time left: <p id='countdown'>50 Seconds<p> </h3>"
                 )
-
-                $.ajax({ url: '/questions', method: 'GET' }).then(function (res) {
+                $.ajax({
+                    url: '/questions',
+                    method: 'GET'
+                }).then(function (res) {
                     for (var i = 0; i < 5; i++) {
                         var thisQ = q[i]
                         // console.log
-
+                        // debugger;
                         quizArea.append("<h3>" + res[thisQ].question + "</h3>");
                         quizArea.append("<br><br><input type='radio' name='question-" + i +
                             "' value='" + res[thisQ].answer1 + "''>" + res[thisQ].answer1);
@@ -107,12 +107,11 @@
                         quizArea.append("<br><br><input type='radio' name='question-" + i +
                             "' value='" + res[thisQ].answer3 + "''>" + res[thisQ].answer3);
                         quizArea.append("<br><br><input type='radio' name='question-" + i +
-                            "' value='" + res[thisQ].answer4 + "''>" + res[thisQ].answer4 + "<br><br><br><br>");
-
-
+                            "' value='" + res[thisQ].answer4 + "''>" + res[thisQ].answer4);
                     }
-                    quizArea.append("<br><br><br><button class='btn btn-danger' id='stop'>Stop</button>");
-                })
+                    quizArea.append("<br><br><br><button id='stop'>Stop</button>");
+                }
+                )
 
 
 
@@ -121,19 +120,19 @@
                 $(".quiz-timer").append(
                     "<h3> You completed the quiz with only</h3> <h3 id='finalCountdown'>50 Seconds</h3><h3> left!</h3>"
                 )
-
+                // debugger;
                 var inputs = quizArea.children("input:checked");
                 var stopQ = 4
 
                 var that = this;
-
+                // debugger;
                 $.ajax({
                     url: '/questions',
                     method: 'GET'
                 }).then(function (res) {
-
+                    // debugger;
                     for (var i = 0; i < 5; i++) {
-
+                        // debugger;
                         var thisQ = q[i]
                         console.log("ThisQ is " + thisQ)
                         console.log("res[thisQ].answer1 is " + res[thisQ].answer1)
@@ -155,7 +154,8 @@
                             rules.wrong++;
                             console.log(that.wrong)
                         }
-                        if (i == 4) {
+                        if (stopQ == 4) {
+                            debugger;
                             that.score();
                         }
                     }
@@ -168,90 +168,43 @@
             },
             score: function () {
                 console.log(this.right)
-
+                // debugger;
                 $("#counterArea").html(" ")
                 clearInterval(timer);
                 $('#finalCountdown').text(this.counter + " seconds")
                 quizArea.html("<h2>Congrats!</h2>");
                 quizArea.append("<h3>Right Answers: " + this.right + "</h3>");
                 quizArea.append("<h3>Wrong Answers: " + this.wrong + "</h3>");
+                $('#exampleModal').modal('show')
                 this.insertscore();
             },
             win: function () {
+
+                $('#winDiv').append('<input class="form-control" id="commInput" type="text" placeholder="Leave a Comment Here">')
                 $('#exampleModal').modal('show')
             },
             insertscore: function () {
-
+                // debugger;
                 // event.preventDefault();
 
-                console.log("player name is: " + $("input#playerName").val());
-                var pN = $("input#playerName").val();
-                var pS = this.right;
-                var pT = this.counter;
-
-                $.ajax({
-                    url: '/insert',
-                    method: 'POST',
-                    data: {
-                        score: pS,
-                        playerName: pN,
-                        time: pT
-                    }
-                }).then(function (res) {
-                    console.log(res.id)
-                    console.log("Insert AJAX ran.")
-                    $.ajax({
-                        url: '/scores',
-                        method: 'GET'
-                    }).then(function (res) {
-                        console.log("Player id for win check: " + res[res.length - 1].id);
-                        var thisPlayer = res[res.length - 1].id;
-
-                        $.ajax({
-                            url: '/leaderboard_feed',
-                            method: 'GET'
-                        }).then(function (res) {
-                            for (var i = 0; i < 5; i++) {
-                                if (thisPlayer == res[i].id) {
-                                    console.log("We have a winner!")
-                                    rules.win();
-
-                                }
-                            }
-                        })
-                    }
-                    )
-                })
-            },
-            insertcomment: function () {
-                $.ajax({
-                    url: '/scores',
-                    method: 'GET'
-                }).then(function (res) {
-                    console.log("Player id: " + res[res.length - 1].id);
-                    console.log("Player comment is: " + $("input#commInput").val());
-                    var c = $("input#commInput").val();
-                    var cI = parseInt(res[res.length - 1].id);
+                console.log($("input#commInput").value);
+                var pn = $("input#commInput").value;
+                var ps =
 
                     $.ajax({
-                        url: '/insert_comment',
+                        url: '/insert',
                         method: 'POST',
                         data: {
-                            comment: c,
-                            comm_id: cI
+                            comment: pn,
+                            comm_id: pt
                         }
                     }).then(function (res) {
-                        console.log("Comment POST AJAX ran.")
-                        debugger;
-                        window.location = '/comments';
-
-                    })
-                })
+                        console.log("Insert AJAX ran.")
+                    });
             },
+            insertcomment: function () {
 
-
-
-
+            }
 
         }
 
@@ -261,10 +214,12 @@
         $(document).on("click", "#stop", function () {
             rules.stop();
         });
-        $(document).on("click", "#commSubmit", function () {
-            rules.insertcomment();
-        });
 
+        function showComments() {
+            $('div').empty();
+
+
+        }
     </script>
 </body>
 

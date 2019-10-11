@@ -2,29 +2,44 @@
 <html>
 
 <head>
-    <title>Leaderboard</title>
-    <!-- CSS Sheet -->
-    <link rel="stylesheet" href="css/style.css">
+    <title>Quote Quiz: Leaderboard</title>
     <!-- font link -->
     <link href="https://fonts.googleapis.com/css?family=Lato|Orbitron&display=swap" rel="stylesheet">
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- CSS Sheet -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
     <% include ../partials/nav %>
     <div class="box">
-        <h1>Quiz</h1>
-        <h2>Leaderboard</h2>
+        <h1>Quote Quiz</h1>
+        <h3>Leaderboard</h3>
         <br>
         <br>
         <div id=leaderboard>
-            <ul></ul>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Score</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                <tbody id="tLeaderboard">
+                </tbody>
+            </table>
         </div>
         <br>
         <br>
     </div>
+
+
+
+
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -37,17 +52,33 @@
                 method: 'GET'
             }).then(function (res) {
                 for (var i = 0; i < res.length; i++) {
+                    // <th scope="row">3</th>
+                    var tR = $('<tr>');
+                    var tH = $('<th>');
+                    tH.attr('scope', 'row');
+                    tH.text(parseInt(i + 1));
+                    var tN = $('<td>');
+                    tN.text(res[i]['player_name'])
+                    var tS = $('<td>');
+                    tS.text(res[i]['score'])
+                    var tT = $('<td>');
+                    tT.text(res[i]['time'])
+                    $(tR).append(tH, tN, tS, tT)
+                    $('#tLeaderboard').append(tR)
+
+
+
                     // debugger;
-                    var br = $('<br>')
-                    var liN = $('<li>');
-                    liN.text("Name: " + res[i]['player_name']);
-                    var liS = $('<li>');
-                    liS.text("Score: " + res[i]['score']);
-                    var liT = $('<li>');
-                    liT.text("Time: " + res[i]['time']);
-                    $('#leaderboard').append(liN, liS, liT);
-                    $('#leaderboard').append(br);
-                    $('#leaderboard').append(br);
+                    // var br = $('<br>')
+                    // var liN = $('<li>');
+                    // liN.text("Name: " + res[i]['player_name']);
+                    // var liS = $('<li>');
+                    // liS.text("Score: " + res[i]['score']);
+                    // var liT = $('<li>');
+                    // liT.text("Time: " + res[i]['time']);
+                    // $('#leaderboard').append(liN, liS, liT);
+                    // $('#leaderboard').append(br);
+                    // $('#leaderboard').append(br);
                 }
             })
         }

@@ -81,7 +81,7 @@ app.get('/leaderboard', function (req, res) {
 //////////////////////////////////////////////////////////////////////
 
 app.get('/leaderboard_feed', function (req, res) {
-    connection.query('SELECT * FROM scores ORDER BY id ASC; ', function (error, results, fields) {
+    connection.query('SELECT * FROM scores ORDER BY score DESC, time DESC;    ', function (error, results, fields) {
         if (error) res.send(error)
         else res.json(results);
     });
@@ -117,25 +117,30 @@ app.post('/insert', function (req, res) {
     connection.query('INSERT INTO scores (score, time, player_name) VALUES (?, ?, ?)', [req.body.score, req.body.time, req.body.playerName], function (error, results, fields) {
         console.log("Insert connection done")
         if (error) res.send(error)
-        else res.redirect('/');
+        else res.json({ id: results.insertId });
     });
-
-    // connection.query('INSERT INTO scores (time) VALUES (?)', [req.body.time], function (error, results, fields) {
-    //     console.log("Score connection: " + req.body.time)
-    // });
-
-    // connection.query('INSERT INTO people (name) VALUES (?)', [req.body.playerName], function (error, results, fields) {
-    //     console.log("Score connection: " + req.body.playerName)
-    //     if (error) res.send(error)
-    //     else res.redirect('/');
-    // });
 })
 
 //////////////////////////////////////////////////////////////////////
 
-app.get('/insert_comment', function (req, res) {
-    connection.query(' ', function (error, results, fields) {
-        if (error) res.send(error)
+app.post('/insert_comment', function (req, res) {
+    // res.json(req.query);
+    console.log("Comment: " + req.body.comment);
+    console.log("Comm_id: " + req.body.comm_id);
+
+
+
+    connection.query('INSERT INTO comments (comment, comm_id) VALUES (?, ?)', [req.body.comment, req.body.comm_id], function (error, results, fields) {
+        console.log("Comment Insert connection done")
+        if (error) res.send(error);
+        else res.redirect('/comments');
+    });
+});
+//////////////////////////////////////////////////////////////////////
+
+app.get('/scores', function (req, res) {
+    connection.query('SELECT * FROM scores;', function (error, results, fields) {
+        if (error) res.send(error);
         else res.json(results);
     });
 });
