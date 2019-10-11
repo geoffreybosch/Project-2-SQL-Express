@@ -3,10 +3,11 @@
 
 <head>
     <title>Quiz</title>
-    <!-- css link -->
+    <!-- CSS Sheet -->
     <link rel="stylesheet" href="css/style.css">
     <!-- font link -->
     <link href="https://fonts.googleapis.com/css?family=Lato|Orbitron&display=swap" rel="stylesheet">
+    <!-- Bootstrap Link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
@@ -14,16 +15,45 @@
 <body>
     <% include ../partials/nav %>
     <div class="box">
-        <h1>Project 2!</h1>
+        <h1>QuizyQuiz</h1>
+        <br>
         <div class="quiz-timer form-group">
-            <h4>Name:</h4>
             <input class="form-control" id="playerName" name="name" type="text" placeholder="Name">
             <div class="quiz">
-
                 <button class="btn btn-success" id="go">Go!</button>
             </div>
         </div>
     </div>
+
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- jquery link -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <!-- js file link -->
@@ -43,13 +73,13 @@
                 $('#go').remove();
                 timer = setInterval(rules.timer, 1000)
                 $(".quiz-timer").append(
-                    "<h3> Time left: <p id='countdown'>50 Seconds<p> </h3>"
+                    "<h3 id='counterArea'> Time left: <p id='countdown'>50 Seconds<p> </h3>"
                 )
                 $.ajax({
                     url: '/questions',
                     method: 'GET'
                 }).then(function (res) {
-                    for (var i = 0; i < res.length; i++) {
+                    for (var i = 0; i < 10; i++) {
                         // console.log
                         // debugger;
                         quizArea.append("<h3>" + res[i].question + "</h3>");
@@ -71,7 +101,7 @@
             },
             stop: function () {
                 $(".quiz-timer").append(
-                    "<h3> You completed the quiz with only</h3> <h3 id='countdown'>50 Seconds</h3><h3> left!</h3>"
+                    "<h3> You completed the quiz with only</h3> <h3 id='finalCountdown'>50 Seconds</h3><h3> left!</h3>"
                 )
                 var inputs = quizArea.children("input:checked");
 
@@ -99,7 +129,7 @@
                             rules.wrong++;
                             console.log(this.wrong)
                         }
-                        if (i == 1) {
+                        if (i == 9) {
                             that.score();
                         }
                     }
@@ -113,13 +143,14 @@
             score: function () {
                 console.log(this.right)
                 // debugger;
+                $("#counterArea").html(" ")
                 clearInterval(timer);
+                $('#finalCountdown').text(this.counter + "seconds")
                 quizArea.html("<h2>Congrats!</h2>");
                 quizArea.append("<h3>Right Answers: " + this.right + "</h3>");
                 quizArea.append("<h3>Wrong Answers: " + this.wrong + "</h3>");
                 this.insertscore();
-            }
-            ,
+            },
             insertscore: function () {
                 // debugger;
                 // event.preventDefault();
@@ -139,7 +170,11 @@
                 }).then(function (res) {
                     console.log("Insert AJAX ran.")
                 });
+            },
+            insertcomment: function () {
+
             }
+
         }
 
         $(document).on("click", "#go", function () {
