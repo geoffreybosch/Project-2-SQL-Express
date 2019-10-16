@@ -99,7 +99,7 @@ app.get('/questions', function (req, res) {
 //////////////////////////////////////////////////////////////////////
 
 app.get('/comment_feed', function (req, res) {
-    connection.query('SELECT comments.id, comments.comment, scores.player_name, scores.score, scores.time FROM comments LEFT JOIN scores ON comments.comm_id = scores.id ORDER BY  comments.id ASC; ', function (error, results, fields) {
+    connection.query('SELECT comments.id, comments.comment, scores.player_name, scores.score, scores.time FROM comments LEFT JOIN scores ON comments.comm_id = scores.id ORDER BY scores.score DESC, scores.time DESC LIMIT 5; ', function (error, results, fields) {
         if (error) res.send(error)
         else res.json(results);
     });

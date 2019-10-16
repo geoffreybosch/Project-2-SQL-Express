@@ -4,7 +4,7 @@
 <head>
     <title>Quote Quiz:Comments</title>
     <!-- font link -->
-    <link href="https://fonts.googleapis.com/css?family=Lato|Orbitron&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron|Raleway&display=swap" rel="stylesheet">
     <!-- Bootstrap Link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -19,7 +19,7 @@
         <h3>These comments have been left by people who have completed the quiz.</h3>
         <br><br>
 
-        <div id="commentBox">
+        <div class="container" id="commentBox">
         </div>
     </div>
 
@@ -37,7 +37,7 @@
                 for (var f = 0; f < res.length; f++) {
                     var card = $('<div>');
                     card.attr('class', 'card');
-                    card.attr('style', 'width: 18rem;');
+                    card.attr('style', 'width: 100%;');
                     var cardBody = $('<div>');
                     cardBody.attr('class', 'card-body');
                     var cH5 = $('<h5>');
